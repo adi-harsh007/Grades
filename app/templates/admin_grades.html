@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Manage Grades - {{ user.username }} - SecureVault{% endblock %}
+{% block content %}
+<div class="mb-4">
+    <h3 class="fw-bold mb-1"><i class="bi bi-mortarboard-fill me-2 text-warning"></i>Manage Grades</h3>
+    <p class="text-muted mb-0">For user: <strong>{{ user.username }}</strong> ({{ user.full_name or user.email }})</p>
+</div>
+
+<div class="row g-4">
+    <!-- Add Grade Form -->
+    <div class="col-lg-5">
+        <div class="glass-card p-4">
+            <h5 class="fw-bold mb-3">Add New Grade</h5>
+            <form method="POST" action="{{ url_for('main.admin_manage_grades', user_id=user.id) }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <div class="mb-3">
+                    <label class="form-label">SUBJECT</label>
+                    <input type="text" name="subject" class="form-control" placeholder="e.g. Mathematics" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">SCORE</label>
+                    <input type="text" name="score" class="form-control" placeholder="e.g. A+" required>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">SEMESTER</label>
+                    <input type="text" name="semester" class="form-control" placeholder="e.g. Fall 2025">
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-plus-circle me-1"></i>Add Grade
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Existing Grades -->
+    <div class="col-lg-7">
+        <div class="glass-card p-4">
+            <h5 class="fw-bold mb-3">Current Grades</h5>
+            {% if grades %}
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Subject</th>
+                            <th>Score</th>
+                            <th>Semester</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for grade in grades %}
+                        <tr>
+                            <td>{{ grade.subject }}</td>
+                            <td><span class="badge bg-success rounded-pill px-3">{{ grade.score }}</span></td>
+                            <td>{{ grade.semester or '—' }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="text-muted text-center mb-0">No grades recorded yet.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<a href="{{ url_for('main.admin_users') }}" class="btn btn-outline-secondary mt-4">
+    <i class="bi bi-arrow-left me-1"></i>Back to Users
+</a>
+{% endblock %}

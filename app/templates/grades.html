@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Grades - SecureVault{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h3 class="fw-bold mb-1"><i class="bi bi-mortarboard-fill me-2"></i>My Grades</h3>
+        <p class="text-muted mb-0">Your academic performance (read-only)</p>
+    </div>
+</div>
+
+{% if grades %}
+<div class="glass-card p-3">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Subject</th>
+                    <th>Score</th>
+                    <th>Semester</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for grade in grades %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td><strong>{{ grade.subject }}</strong></td>
+                    <td>
+                        <span class="badge bg-success rounded-pill px-3">{{ grade.score }}</span>
+                    </td>
+                    <td>{{ grade.semester or '—' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% else %}
+<div class="glass-card p-5 text-center">
+    <i class="bi bi-journal-x display-1 text-muted mb-3"></i>
+    <h5 class="text-muted">No Grades Available</h5>
+    <p class="text-muted">Your grades will appear here once they are published by an administrator.</p>
+</div>
+{% endif %}
+{% endblock %}
